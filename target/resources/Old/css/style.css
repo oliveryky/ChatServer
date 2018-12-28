@@ -1,0 +1,34 @@
+body {
+    font-size: 100%;
+    font-family: "Roboto", sans-serif;
+    color: #3d3536;
+    background-color: white;
+    
+  }
+  div{
+    width: 100%;
+  }
+
+  .main{
+    text-align: center;
+    vertical-align: middle;
+  }
+  .main h1, p, a{
+    color: #3d3536;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    font-size: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  #image{
+    background-attachment: fixed;
+    background-size: cover;
+    padding-bottom: 1em;
+  }
+ 
+  
+  @keyframes type{ 
+    from { width: 0; } 
+  } 
