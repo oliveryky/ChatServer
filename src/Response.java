@@ -8,7 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Stores all the necessary response information and determines what type of response to send
+ * Stores all the necessary response information and determines what type of response to send based on the request.
+ *
  */
 public class Response {
     //stores the file for the response if there is one
@@ -87,6 +88,7 @@ public class Response {
      */
     private void writeHS(OutputStream out, String key) throws IOException {
         try {
+            //standard WS response template
             byte[] res = ("HTTP/1.1 101 Switching Protocols\r\n"
                     + "Connection: Upgrade\r\n"
                     + "Upgrade: websocket\r\n"

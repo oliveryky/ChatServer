@@ -24,6 +24,8 @@ public class ChatRoom {
 
     /**
      * ChatRoom constructor
+     * Creates a new room or if it's reopening a new room, try to get all messages from a previous session
+     * from the database.
      */
     public ChatRoom(Connection connection, String roomName) {
         clients = new HashSet<>();
@@ -48,8 +50,17 @@ public class ChatRoom {
     }
 
     /**
-     * Listens to all the clients in the room for incoming messages
-     * updates all clients
+     * Listens to all the clients in the room for incoming messages and updates all clients with new messages.
+     * A socketchannel is used here b/c once we start listening for websocket messages the thread becomes blocked.
+     * A selector is used to keep track of multiple socket channels which will return a collection of all channels
+     * that have data that is ready.
+     *
+     * Each channel is registered with the selector using the READ key. Channels must be in non-blocking mode.
+     * Once it has valid data we remove the channel from the selector and set the channel to blocking mode.
+     * This enables use to the get relevant data from that channel before setting it back to non-blocking mode to
+     * re-register with the selector.
+     *
+     * Will only add new clients to the room after the selector finishes with the current round of valid channels.
      * @throws IOException
      */
     public void listen() throws IOException{
@@ -123,6 +134,8 @@ public class ChatRoom {
 
     /**
      * adds a socket channel to the current room
+     * need to be synchronized so that we don't concurrently modify the client queue
+     * when two users attemp to join the room at the same time.
      * @param sc
      */
     public synchronized void addSocketChannel(SocketChannel sc) {
@@ -156,6 +169,7 @@ public class ChatRoom {
 
     /**
      * sends a user all the messages so far
+     * Synchronized b/c we don't want to be reading and writing from the same user at the same time
      * @param sc
      */
     private synchronized void sendAll(SocketChannel sc) {
@@ -171,6 +185,7 @@ public class ChatRoom {
 
     /**
      * adds the msg to the chat history database
+     * Synchronized b/c we don't want multiple rooms trying to add to the same database at the same time
      * @param msg
      */
     private synchronized void addToDB(WebSocketMsg msg) {
@@ -188,6 +203,9 @@ public class ChatRoom {
         }
     }
 
+    /**
+     * @return true if the room has no active users
+     */
     public boolean hasClosed() {
         return hasClosed;
     }

@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * parses a HTTP request into an passable object
+ * Parses a HTTP request into an passable object
  */
 public class Request {
     //string containing the request type
@@ -20,7 +20,8 @@ public class Request {
     private String wsKey;
 
     /**
-     * constructor
+     * The constructor checks and determines what type of request is coming
+     * from the client and whether or not it is valid.
      * @param request
      */
     public Request(Scanner request) {

@@ -8,11 +8,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.sql.*;
 
-/**
- * Server opens up a new thread for each connection, if its a new room request it will
- * attemp to join the connection to an existing thread containing a room,
- * if the room does not exist then the current thread will be kept alive.
- */
 public class Server {
     //stores all the rooms the server is hosting
     private HashMap<String, ChatRoom> rooms;
@@ -24,7 +19,7 @@ public class Server {
     private final int PORT_NUM = 8080;
 
     /**
-     * Constructor
+     * Constructor, creates a new server and establishes a connection to the message database
      */
     Server() {
         rooms = new HashMap<>();
@@ -62,7 +57,11 @@ public class Server {
     }
 
     /**
-     * runs server using multithreading
+     * Server opens up a new thread for each connection, if its a new room request it will
+     * attemp to join the connection to an existing thread containing a room,
+     * if the room does not exist then a new thread will be created to host the room.
+     * Any subsequent client connections to a pre-existing room will simply have their connections
+     * added to the existing thread without keeping a client request thread alive for the duration of their connection.
      */
     public void run() {
         try {
@@ -155,6 +154,7 @@ public class Server {
             room.listen();
         }
 
+        //when the room becomes empty we can remove the room from the server altogether
         if(rooms.get(roomName).hasClosed()) {
             rooms.remove(roomName);
         }
