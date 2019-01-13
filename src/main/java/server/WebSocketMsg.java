@@ -4,6 +4,9 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Stores, encode and decodes the websocket message
+ */
 public class WebSocketMsg {
     //byte representation of the decoded msg
     private byte[] decoded;
@@ -161,6 +164,9 @@ public class WebSocketMsg {
         return encoded;
     }
 
+    /**
+     * @return whether or not this dataframe tells that the connection has been terminated
+     */
     public boolean isClosed() {
         return isClosed;
     }

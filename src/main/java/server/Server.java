@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.sql.*;
 
+/**
+ * Server opens up a new thread for each connection, if its a new room request it will
+ * attemp to join the connection to an existing thread containing a room,
+ * if the room does not exist then the current thread will be kept alive.
+ */
 public class Server {
     //stores all the rooms the server is hosting
     private HashMap<String, ChatRoom> rooms;
@@ -31,6 +36,7 @@ public class Server {
                 e.printStackTrace();
             }
 
+            //only run once to create database
 //            connection = DriverManager.getConnection("jdbc:sqlite:chatHistory.db");
 //            Statement s = connection.createStatement();
 //            String template = "CREATE TABLE chatHistory (\n"
@@ -56,7 +62,7 @@ public class Server {
     }
 
     /**
-     * runs server using multithread
+     * runs server using multithreading
      */
     public void run() {
         try {
@@ -133,6 +139,12 @@ public class Server {
         }
     }
 
+    /**
+     * checks if the room requested is already running
+     * @param roomName
+     * @param client
+     * @throws IOException
+     */
     private void checkIfRoomExists(String roomName, SocketChannel client) throws IOException {
         if (rooms.containsKey(roomName)) {
             rooms.get(roomName).addSocketChannel(client);

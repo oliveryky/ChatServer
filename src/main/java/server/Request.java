@@ -4,6 +4,9 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * parses a HTTP request into an passable object
+ */
 public class Request {
     //string containing the request type
     private String requestType;

@@ -7,6 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Stores all the necessary response information and determines what type of response to send
+ */
 public class Response {
     //stores the file for the response if there is one
     private File file;

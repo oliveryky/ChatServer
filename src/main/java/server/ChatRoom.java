@@ -90,6 +90,8 @@ public class ChatRoom {
                         //updates all clients in the room with the new message
                         update(msg);
                     }else {
+                        //if the websocket connection is closed then remove
+                        //and close the connection from the room
                         clients.remove(channel);
                         channel.socket().close();
                         if(clients.isEmpty()) {
